@@ -1,0 +1,156 @@
+@extends('layouts.main')
+
+@section('content')
+
+<section class="page-header">
+        <div class="bg-overlay"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="page-header-title text-center text-white">
+                        <h4 class="text-uppercase">Vue des Offres</h4>
+                        <div>
+                            <ol class="breadcrumb justify-content-center">
+                                <li class="breadcrumb-item"><a href="#">Winajob</a></li>
+                                <li class="breadcrumb-item"><a href="#">Offres</a></li>
+                                <li class="breadcrumb-item active">Liste des Offres</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end home -->
+    <!-- Search Bar -->
+    <div class="home-form-position">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-10">
+                                <div class="home-registration-form p-4 mb-3">
+                                    <form action="{{url('/searchbaraccueil')}}" class="registration-form" method="get">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="registration-form-box">
+                                                    <i class="fa fa-briefcase"></i>
+                                                    <input type="text" name="keyword" id="exampleInputName1" class="form-control registration-input-box" placeholder="Mots clé de l'emploi...">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="registration-form-box">
+                                                    <i class="fa fa-location-arrow"></i>
+                                                    <input type="text" name="location" id="exampleInputName1" class="form-control registration-input-box" placeholder="Localisation...">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="registration-form-box">
+                                                    <i class="fa fa-list-alt"></i>
+                                                    <select id="select-category" class="demo-default" placeholder="Categories..." name="categorie">
+                                                            @foreach(App\Models\Categorie::all() as $cat)
+                                                            <option value ="{{$cat -> id}}">{{$cat->name}}</option>
+                                                            @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="registration-form-box">
+                                                    <input type="submit" id="submit" name="send" class="submitBnt btn btn-custom btn-block" value="Rechercher">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        <!-- end Search Bar -->
+
+    <section class="">
+        <div class="container">
+        <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <div class="show-results mt-4">
+                        <div class="float-left">
+                            <h5 class="text-dark mb-0 pt-2"></h5>
+                        </div>
+                        <div class="sort-button float-right">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item mr-3">
+                                    <select class="form-control" name ="genre">
+                                        <option data-display="Sort By" >Filtrer Par genre</option>
+                                        <option value="Homme">Homme</option>
+                                        <option value="Femme">Femme</option>
+                                        <option value="Les deux">Les deux</option>
+                                    </select>
+                                </li>
+
+                                <li class="list-inline-item">
+                                    <select class="form-control" name="salaire">
+                                        <option data-display="Default">Filtrer par salaire</option>
+                                        <option value="1">0-25000</option>
+                                        
+                                    </select>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <div class="show-results mt-4">
+                        <div class="float-left">
+                            <h5 class="text-dark mb-0 pt-2">Affichage ( {{$comp}} Jobs & Formations )</h5>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-9">
+                    <div class="row">
+                        @foreach($jobs as $job)
+                        <div class="col-lg-4 col-md-6">
+                            <div class="list-grid-item mt-4">
+                                <div class="grid-item-content p-2">
+                                    <ul class="list-inline mb-0">
+                                        <li class="list-inline-item f-15"><span class="badge badge-success"> {{$job -> type}} </span></li>
+                                        <li class="list-inline-item float-right">
+                                            <div class="grid-fev-icon">
+                                                <a href="#" class="text-custom"><i class="mdi mdi-heart"></i></a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="grid-list-img mt-3">
+                                        <img src="{{asset('public/files/logos')}}/{{$job->company->logo}}" alt="" class="img-fluid mx-auto d-block">
+                                    </div>
+                                    <div class="grid-list-desc text-center mt-3">
+                                        <h5 class="mb-1"><a href="#" class="text-dark">{{$job -> titre}}</a></h5>
+                                        <p class="text-muted f-14 mb-1">{{$job -> adresse}}</p>
+                                        <p class="text-muted mb-1">{{$job -> salaire_min}} - {{$job -> salaire_max}} /mois</p>
+                                        <p class="text-muted mb-1">{{$job -> experience}}</p>
+                                    </div>
+                                </div>
+                                <hr class="mt-0 mb-0">
+                                <div class="apply-button text-center mt-2 mb-2">
+                                    <a href="{{url('/showjob',$job -> id)}}" class="btn btn-custom btn-sm">Voir</a>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    {{$jobs -> links('Winajob-Autres.my-paginate')}}
+                </div>
+                
+                    
+            </div>
+        </div>
+    </section>
+
+    @include('Winajob-Autres.Suscribe')
+
+   
+
+@endsection 
